@@ -22,7 +22,7 @@ object FluxModule {
 
     @Singleton
     @Provides
-    fun providesFluxStore(dispatcher: FluxDispatcher): FluxStore {
+    fun providesFluxStore(dispatcher: FluxDispatcher): TodoStore {
         return TodoStore(dispatcher)
     }
 

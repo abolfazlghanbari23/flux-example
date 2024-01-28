@@ -6,23 +6,21 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.fluxexample.action.AddTodoAction
 import com.example.fluxexample.databinding.ActivityMainBinding
-import com.example.fluxexample.dispatcher.MainDispatcher
 import com.example.fluxexample.event.TodoSavedEvent
+import androidx.activity.viewModels
 import com.example.fluxexample.flux.Event
-import com.example.fluxexample.flux.FluxDispatcher
 import com.example.fluxexample.flux.FluxStore
 import com.example.fluxexample.flux.FluxView
 import com.example.fluxexample.store.TodoStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.greenrobot.eventbus.EventBus
 
 @AndroidEntryPoint
-class MainActivity @Inject constructor() : AppCompatActivity(), FluxView {
+class MainActivity : AppCompatActivity() {
+    private val viewModel by viewModels<MainViewModel>()
     private lateinit var binding: ActivityMainBinding
-    private val dispatcher: FluxDispatcher by lazy { MainDispatcher() }
-    private val store: FluxStore by lazy { TodoStore(dispatcher) }
     private lateinit var disposable: Flow<Event>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,10 +31,10 @@ class MainActivity @Inject constructor() : AppCompatActivity(), FluxView {
         binding.btnSave.setOnClickListener {
             val text = binding.etTitle.text.toString()
             val action = AddTodoAction(text)
-            dispatcher.dispatch(action)
+            EventBus.getDefault().post(action)
         }
 
-        disposable = store.subscribe(this)
+        disposable = viewModel.store.subscribe(this)
         lifecycleScope.launch {
             disposable.collect { event ->
                 if (event is TodoSavedEvent) {
@@ -51,8 +49,18 @@ class MainActivity @Inject constructor() : AppCompatActivity(), FluxView {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this);
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this);
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        store.unsubscribe(disposable)
+        viewModel.store.unsubscribe(disposable)
     }
 }

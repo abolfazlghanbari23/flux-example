@@ -56,6 +56,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
 
+    // event bus
+    implementation("org.greenrobot:eventbus:3.3.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
