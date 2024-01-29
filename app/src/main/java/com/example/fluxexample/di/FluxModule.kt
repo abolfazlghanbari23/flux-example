@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -20,8 +21,11 @@ object FluxModule {
 
     @Singleton
     @Provides
-    fun providesCounterStore(dispatcher: CounterDispatcher): CounterStore {
-        return CounterStore(dispatcher)
+    fun providesCounterStore(
+        @MainDispatcher coroutineDispatcher: CoroutineDispatcher,
+        dispatcher: CounterDispatcher
+    ): CounterStore {
+        return CounterStore(coroutineDispatcher, dispatcher)
     }
 
 }
