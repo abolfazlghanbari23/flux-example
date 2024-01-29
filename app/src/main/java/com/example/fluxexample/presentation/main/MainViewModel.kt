@@ -1,14 +1,17 @@
-package com.example.fluxexample.counter
+package com.example.fluxexample.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fluxexample.counter.CounterAction
+import com.example.fluxexample.counter.CounterDispatcher
+import com.example.fluxexample.counter.CounterStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CounterViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val dispatcher: CounterDispatcher,
     store: CounterStore
 ) : ViewModel() {
