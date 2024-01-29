@@ -1,9 +1,7 @@
 package com.example.fluxexample.di
 
-import com.example.fluxexample.dispatcher.MainDispatcher
-import com.example.fluxexample.flux.FluxDispatcher
-import com.example.fluxexample.flux.FluxStore
-import com.example.fluxexample.store.TodoStore
+import com.example.fluxexample.counter.CounterDispatcher
+import com.example.fluxexample.counter.CounterStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,14 +14,14 @@ object FluxModule {
 
     @Singleton
     @Provides
-    fun providesFluxDispatcher(): FluxDispatcher {
-        return MainDispatcher()
+    fun providesCounterDispatcher(): CounterDispatcher {
+        return CounterDispatcher()
     }
 
     @Singleton
     @Provides
-    fun providesFluxStore(dispatcher: FluxDispatcher): TodoStore {
-        return TodoStore(dispatcher)
+    fun providesCounterStore(dispatcher: CounterDispatcher): CounterStore {
+        return CounterStore(dispatcher)
     }
 
 }
